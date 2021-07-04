@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import "../App.css";
+import { useHistory } from "react-router-dom";
 
 function Login(props) {
   const [user, setUser] = useState("");
-  const [password, setPassword] = useState("");
+  const [warning, setWarning] = useState(false);
+  const history = useHistory();
+  const redirectToUser = useCallback(() => history.push("/mail"), [history]);
+  const redirectToAdmin = useCallback(() => history.push("/admin"), [history]);
+
+  const onLogin = () => {
+    const a = parseInt(user.substring(4));
+    if (user.substring(0, 4) === "User" && !isNaN(a)) {
+      redirectToUser();
+    } else if (user === "admin") {
+      redirectToAdmin();
+    } else {
+      setWarning(true);
+    }
+  };
+  
   return (
     <div className="Login">
       <p>
@@ -15,17 +31,13 @@ function Login(props) {
           onChange={(event) => setUser(event.target.value)}
         />
       </p>
+      <span style={{ display: warning ? "block" : "none", color: "#ff1744" }}>
+        Uesrname must start with "User" or "admin"
+      </span>
       <p>
-        Password:
-        <br />
-        <input
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </p>
-      <p>
-        <button style={{width: "100px"}}type="button">Login</button>
+        <button style={{ width: "100px" }} type="button" onClick={onLogin}>
+          Login
+        </button>
       </p>
     </div>
   );

@@ -47,9 +47,10 @@ tr:nth-child(even) {
 }
 
 .mailBox {
-  margin: 20px;
-  padding: 10px;
+  margin: 5px;
+  padding: 5px;
   display: flex;
+  flex-direction: column;
   height: 600px;
   border: 1px solid #cdcdcd;
   border-color: rgba(0, 0, 0, 0.15);
