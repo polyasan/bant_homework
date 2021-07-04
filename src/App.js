@@ -1,11 +1,13 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Login from "./components/login";
 import Admin from "./components/admin";
 import Mail from "./components/mail";
 
 function App() {
+  const [user, setUser] = useState("");
+
   return (
     <Router>
       <div>
@@ -25,7 +27,7 @@ function App() {
         {""}
         <Switch>
           <Route path="/mail">
-            <Mail mailText={"Sdsdsdsdsd"} />
+            <Mail user={user} />
           </Route>
           <Route path="/admin">
             <Admin
@@ -37,7 +39,7 @@ function App() {
             />
           </Route>
           <Route path="/">
-            <Login />
+            <Login setUser={setUser}/>
           </Route>
         </Switch>
       </div>

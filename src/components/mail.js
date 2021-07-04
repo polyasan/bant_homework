@@ -2,11 +2,15 @@ import "../App.css";
 import { useState, useEffect } from "react";
 
 function Mail(props) {
-  const [modalActive, setModalActive] = useState("none");
+  const [modalActive, setModalActive] = useState(false);
   const [mailBody, setMailBody] = useState([]);
+  const [timestamp, setTimeStamp] = useState(0);
 
   useEffect(() => {
     getItem();
+    setTimeout(() => {
+      setModalActive(true);
+    }, 120000);
   }, []);
 
   const getItem = () => {
@@ -23,10 +27,35 @@ function Mail(props) {
         const jsonData = JSON.parse(data.body);
         console.log(jsonData);
         setMailBody(jsonData.body.split("\n"));
+        setTimeStamp(jsonData.timestamp);
       });
   };
 
-  const sendResponse = (response) => {};
+  const sendResponse = (status) => {
+    const response = {
+      timestamp: timestamp,
+      processedBy: props.user,
+      statusToSet: status,
+    };
+
+    fetch("https://bw3p5wmm8f.execute-api.us-east-2.amazonaws.com/beta/", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ action: "set_status", ...response }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const jsonData = JSON.parse(data.body);
+        console.log(jsonData);
+        getItem();
+        setTimeout(() => {
+          setModalActive(true);
+        }, 120000);
+      });
+  };
 
   return (
     <div>
@@ -64,7 +93,11 @@ function Mail(props) {
           </div>
         ))}
       </div>
-      <div id="id01" className="modal" style={{ display: modalActive }}>
+      <div
+        id="id01"
+        className="modal"
+        style={{ display: modalActive ? "block" : "none" }}
+      >
         <div className="modalContent">
           <div className="modalContainer">
             <h1>Session expired</h1>
@@ -73,7 +106,10 @@ function Mail(props) {
               <button
                 style={{ width: "100px" }}
                 type="button"
-                onClick={() => setModalActive("none")}
+                onClick={() => {
+                  setModalActive(false);
+                  getItem();
+                }}
               >
                 Ok
               </button>

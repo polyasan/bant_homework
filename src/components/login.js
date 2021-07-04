@@ -12,14 +12,16 @@ function Login(props) {
   const onLogin = () => {
     const a = parseInt(user.substring(4));
     if (user.substring(0, 4) === "User" && !isNaN(a)) {
+      props.setUser(user);
       redirectToUser();
     } else if (user === "admin") {
       redirectToAdmin();
+      props.setUser(user);
     } else {
       setWarning(true);
     }
   };
-  
+
   return (
     <div className="Login">
       <p>
