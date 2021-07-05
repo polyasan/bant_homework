@@ -34,7 +34,7 @@ function Login(props) {
         />
       </p>
       <span style={{ display: warning ? "block" : "none", color: "#ff1744" }}>
-        Uesrname must start with "User" or "admin"
+        Uesrname must be "User1", "User2" ... or "admin"
       </span>
       <p>
         <button style={{ width: "100px" }} type="button" onClick={onLogin}>
